@@ -1,20 +1,39 @@
 <?php
 require_once './vendor/autoload.php';
 
-use DiDom\Document;
-
+use DiDom\Document as DOM;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
-$master = array();
 
-$document = new Document('https://www.finn.no/pw/search/snowmobile?orgId='.$_ENV['ORG_ID'], true);
+
+if(!isset($_GET['vehicle'])) {
+    die('vehicle type not set');
+}
+
+switch($_GET['vehicle']) {
+    case "car": 
+        $vehicleType = "car-norway";
+        break;
+
+    case "snowmobile":
+        $vehicleType = "snowmobile";
+        break;
+
+    default: 
+        die('incorrect vehicle type');
+        break;
+}
+
+$document = new DOM('https://www.finn.no/pw/search/'.$vehicleType.'?orgId='.$_ENV['ORG_ID'], true);
 $ads = $document->find('.unit.flex.align-items-stretch.result-item');
+
+$master = array();
 
 foreach($ads as $ad) {
     $tekst = $ad->find('.t4.word-break.mhn')[0]->text();
     $tittel = explode(" ", $tekst);
-
+    
     $master[] = array(  
         'link' => $ad->find('a.clickable::attr(href)')[0], 
         'tittel' => $tittel[0]. " " . $tittel[1],
