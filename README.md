@@ -1,6 +1,6 @@
 # Finn.no scraper
 
-This php script is a scraper that gets information about a vendors snowmobile ads on Finn.no. 
+This php script is a scraper that gets information about a vendors vehicle ads on Finn.no. 
 
 
 ### Usage
